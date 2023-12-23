@@ -21,7 +21,10 @@ const events = require("./routes/events");
 const subscribe = require("./routes/subscribe");
 
 // MongoDB connection
-mongoose.connect(process.env.MONGODB_URI, { useUnifiedTopology: true });
+mongoose.connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+});
 
 mongoose.connection.on('connected', () => {
 	console.log('MongoDB connected successfully');

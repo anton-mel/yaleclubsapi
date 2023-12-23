@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const cors = require('cors');
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo');
+const cookieParser = require('cookie-parser');
 const http = require('http');
 const WebSocket = require('ws');
 
@@ -36,6 +37,7 @@ mongoose.connection.on('disconnected', () => {
 });
 
 const app = express();
+app.use(cookieParser());
 const server = http.createServer(app);
 const socketServer = new WebSocket.Server({ noServer: true });
 

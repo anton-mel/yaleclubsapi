@@ -29,8 +29,9 @@ router.get('/auth/redirect', async (req, res) => {
         const parser = new XMLParser();
         const results = parser.parse(casResponse.data);
         const userId = results['cas:serviceResponse']['cas:authenticationSuccess']['cas:user'];
-        console.log(userId);
-    
+        const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: '12h' });
+        console.log(token);
+        
         // Check if the user is already in MongoDB
         const existingUser = await User.findOne({ userId });
     
@@ -42,7 +43,6 @@ router.get('/auth/redirect', async (req, res) => {
         }
     
         // Create a JWT token with user information
-        const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: '12h' });
         res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'strict' });
     } catch (error) {
         console.error('Error in CAS redirection:', error);

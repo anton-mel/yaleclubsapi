@@ -1,11 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
+import verifyToken from '../middleware/verifyToken';
 
-router.post('/save-club', async (req, res) => {
+
+router.post('/save-club', verifyToken, async (req, res) => {
   try {
     const { clubId } = req.body;
-    const userId = req.session.user;
+    const userId = req.userId;
 
     if (!userId) {
         return res.status(401).json({ error: 'User not authenticated' });
@@ -33,10 +35,10 @@ router.post('/save-club', async (req, res) => {
 });
 
 // GET route to check if a club is saved
-router.get('/check-club/:clubId', async (req, res) => {
+router.get('/check-club/:clubId', verifyToken, async (req, res) => {
   try {
     const { clubId } = req.params;
-    const userId = req.session.user;
+    const userId = req.userId;
 
     if (!userId) {
         return res.status(401).json({ error: 'User not authenticated' });
@@ -57,9 +59,9 @@ router.get('/check-club/:clubId', async (req, res) => {
 });
 
 // GET route to get all clubs saved by a user
-router.get('/get-saved-clubs', async (req, res) => {
+router.get('/get-saved-clubs', verifyToken, async (req, res) => {
   try {
-    const userId = req.session.user;
+    const userId = req.userId;
 
     if (!userId) {
         return res.status(401).json({ error: 'User not authenticated' });

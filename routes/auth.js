@@ -44,12 +44,11 @@ router.get('/auth/redirect', async (req, res) => {
 
         // Create a JWT token with user information
         res.status(200).json({ token });
+        res.end();
     } catch (error) {
         console.error('Error in CAS redirection:', error);
         res.status(500).send('Internal Server Error');
     }
-    
-    res.redirect('http://localhost:8081');
 });
 
 module.exports = router;

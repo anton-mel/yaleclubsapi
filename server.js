@@ -36,7 +36,6 @@ mongoose.connection.on('disconnected', () => {
 });
 
 const app = express();
-const port = process.env.PORT || 8081;
 const server = http.createServer(app);
 const socketServer = new WebSocket.Server({ noServer: true });
 
@@ -92,11 +91,6 @@ server.on('upgrade', (request, socket, head) => {
     socketServer.handleUpgrade(request, socket, head, (ws) => {
         socketServer.emit('connection', ws, request);
     });
-});
-
-// Server Listener
-server.listen(port, () => {
-    console.log(`Server running on port ${port}`);
 });
 
 socketServer.on('connection', (socket) => {

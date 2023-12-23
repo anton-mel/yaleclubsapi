@@ -43,10 +43,7 @@ router.get('/auth/redirect', async (req, res) => {
         // Create a JWT token with user information
         const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: '12h' });
 
-        // Set the token in a client-side storage (e.g., cookies or local storage)
         res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'strict' });
-
-        res.redirect('http://localhost:8081/');
     } catch (error) {
         console.error('Error in CAS redirection:', error);
         res.status(500).send('Internal Server Error');

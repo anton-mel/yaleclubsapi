@@ -12,13 +12,13 @@ const WebSocket = require('ws');
 // Routes
 // const authMiddleware = require('./middleware/authMiddleware');
 const data = require("./routes/data");
-// const comment = require("./routes/comment");
-// const comments = require("./routes/comments");
-// const auth = require("./routes/auth");
-// const logout = require("./routes/logout");
-// const save_club = require("./routes/save");
-// const events = require("./routes/events");
-// const subscribe = require("./routes/subscribe");
+const comment = require("./routes/comment");
+const comments = require("./routes/comments");
+const auth = require("./routes/auth");
+const logout = require("./routes/logout");
+const save_club = require("./routes/save");
+const events = require("./routes/events");
+const subscribe = require("./routes/subscribe");
 
 // MongoDB connection
 mongoose.connect(process.env.MONGODB_URI);
@@ -77,13 +77,13 @@ app.use(bodyParser.urlencoded({extended:true}));
 
 // Routes
 app.use("/api", data);
-// app.use("/api", comment);
-// app.use("/api", comments);
-// app.use("/api", auth);
-// app.use("/api", logout);
-// app.use("/api", save_club);
-// app.use("/api", events);
-// app.use("/api", subscribe);
+app.use("/api", comment);
+app.use("/api", comments);
+app.use("/api", auth);
+app.use("/api", logout);
+app.use("/api", save_club);
+app.use("/api", events);
+app.use("/api", subscribe);
 
 
 // WebSocket server handling upgrades

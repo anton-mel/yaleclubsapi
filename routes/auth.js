@@ -21,15 +21,15 @@ const get_ticket_validation_link = (ticket) => {
 router.get('/auth/redirect', async (req, res) => {
     try {
         const casResponse = await axios.get(get_ticket_validation_link(req.query.ticket));
-        console.log(casResponse);
-    
+        
         if (casResponse.data === undefined) {
             return res.status(400).send('Invalid response from CAS server');
         }
-    
+        
         const parser = new XMLParser();
         const results = parser.parse(casResponse.data);
         const userId = results['cas:serviceResponse']['cas:authenticationSuccess']['cas:user'];
+        console.log(userId);
     
         // Check if the user is already in MongoDB
         const existingUser = await User.findOne({ userId });

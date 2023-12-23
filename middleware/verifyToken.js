@@ -1,7 +1,7 @@
 
 const jwt = require('jsonwebtoken');
 
-module.exports = async (req, res) => {
+module.exports = async (req, res, next) => {
   const token = req.cookies.token;
 
   if (!token) {
@@ -10,7 +10,7 @@ module.exports = async (req, res) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET || 'defaultSecret');
-    req.userId = decoded; // Attach user information to the request
+    req.userId = decoded;
     return next();
   } catch (error) {
     console.error('Error verifying token:', error);

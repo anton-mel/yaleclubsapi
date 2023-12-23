@@ -10,7 +10,7 @@ const http = require('http');
 const WebSocket = require('ws');
 
 // Routes
-// const authMiddleware = require('./middleware/authMiddleware');
+const authMiddleware = require('./middleware/authMiddleware');
 const data = require("./routes/data");
 const comment = require("./routes/comment");
 const comments = require("./routes/comments");
@@ -50,21 +50,14 @@ app.use(session({
 	store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI}),
 }));
 
-// app.use((req, res, next) => {
-//     res.header('Access-Control-Allow-Origin', 'http://localhost:8081');
-//     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-//     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-//     next();
-// });
-
 // Middleware
-// app.use((req, res, next) => {
-// 	if (!req.url.startsWith('/api')) {
-// 		authMiddleware(req, res, next);
-//     } else {
-//         next();
-//     }
-// });
+app.use((req, res, next) => {
+	if (!req.url.startsWith('/api')) {
+		authMiddleware(req, res, next);
+    } else {
+        next();
+    }
+});
 
 // Views
 app.set("views",  path.join(__dirname, "views"));

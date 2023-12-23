@@ -7,7 +7,7 @@ const router = express.Router();
 
 const CAS_SERVER = 'https://secure.its.yale.edu';
 const CAS_VALIDATE_ROUTE = '/cas/serviceValidate';
-const CAS_SERVICE = "http://localhost:8081/api/auth/redirect";
+const CAS_SERVICE = `https://yaleclubsapi.vercel.app/api/auth/redirect`;
 
 const get_ticket_validation_link = (ticket) => {
     const validateURL = new URL(CAS_VALIDATE_ROUTE, CAS_SERVER)

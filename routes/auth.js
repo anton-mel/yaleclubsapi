@@ -21,6 +21,7 @@ const get_ticket_validation_link = (ticket) => {
 router.get('/auth/redirect', async (req, res) => {
     try {
         const casResponse = await axios.get(get_ticket_validation_link(req.query.ticket));
+        console.log(casResponse);
     
         if (casResponse.data === undefined) {
             return res.status(400).send('Invalid response from CAS server');
@@ -42,7 +43,6 @@ router.get('/auth/redirect', async (req, res) => {
     
         // Create a JWT token with user information
         const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: '12h' });
-
         res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'strict' });
     } catch (error) {
         console.error('Error in CAS redirection:', error);

@@ -19,6 +19,7 @@ const get_ticket_validation_link = (ticket) => {
 router.get('/auth/redirect', async (req, res) => {
     try {
         const casResponse = await axios.get(get_ticket_validation_link(req.query.ticket));
+        console.log(casResponse);
     
         if (casResponse.data === undefined) {
             return res.status(400).send('Invalid response from CAS server');

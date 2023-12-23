@@ -21,10 +21,7 @@ const events = require("./routes/events");
 const subscribe = require("./routes/subscribe");
 
 // MongoDB connection
-mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-});
+mongoose.connect(process.env.MONGODB_URI);
 
 mongoose.connection.on('connected', () => {
 	console.log('MongoDB connected successfully');
@@ -111,3 +108,4 @@ socketServer.on('connection', (socket) => {
 
 // Make the WebSocket server available to other parts of your application
 app.io = socketServer;
+module.exports = app;

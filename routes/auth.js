@@ -34,16 +34,15 @@ router.get('/auth/redirect', async (req, res) => {
         // Check if the user is already in MongoDB
         const existingUser = await User.findOne({ userId });
         
+        // Save the user to MongoDB if not already present
         if (!existingUser) {
-            console.log('fsdfs');
-            // Save the user to MongoDB if not already present
             const newUser = new User({ userId });
             await newUser.save();
             console.log(`User ${userId} saved to MongoDB`);
         }
     
         // Create a JWT token with user information
-        res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'strict' });
+        res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'strict', domain: 'http://localhost:8081/', path: '/' });
     } catch (error) {
         console.error('Error in CAS redirection:', error);
         res.status(500).send('Internal Server Error');

@@ -30,12 +30,12 @@ router.get('/auth/redirect', async (req, res) => {
         const results = parser.parse(casResponse.data);
         const userId = results['cas:serviceResponse']['cas:authenticationSuccess']['cas:user'];
         const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: '12h' });
-        console.log(token);
         
         // Check if the user is already in MongoDB
         const existingUser = await User.findOne({ userId });
-    
+        
         if (!existingUser) {
+            console.log('fsdfs');
             // Save the user to MongoDB if not already present
             const newUser = new User({ userId });
             await newUser.save();

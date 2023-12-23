@@ -1,6 +1,7 @@
 const express = require("express");
 const axios = require("axios")
 const { XMLParser} = require("fast-xml-parser");
+const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
 const router = express.Router();
@@ -8,6 +9,7 @@ const router = express.Router();
 const CAS_SERVER = 'https://secure.its.yale.edu';
 const CAS_VALIDATE_ROUTE = '/cas/serviceValidate';
 const CAS_SERVICE = `https://yaleclubsapi.vercel.app/api/auth/redirect`;
+const JWT_SECRET = 'yaleclubs';
 
 const get_ticket_validation_link = (ticket) => {
     const validateURL = new URL(CAS_VALIDATE_ROUTE, CAS_SERVER)
@@ -19,7 +21,6 @@ const get_ticket_validation_link = (ticket) => {
 router.get('/auth/redirect', async (req, res) => {
     try {
         const casResponse = await axios.get(get_ticket_validation_link(req.query.ticket));
-        console.log(casResponse);
     
         if (casResponse.data === undefined) {
             return res.status(400).send('Invalid response from CAS server');
@@ -39,8 +40,12 @@ router.get('/auth/redirect', async (req, res) => {
             console.log(`User ${userId} saved to MongoDB`);
         }
     
-        req.session.user = userId;
-        req.session.redirected = true;
+        r// Create a JWT token with user information
+        const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: '1h' });
+
+        // Set the token in a client-side storage (e.g., cookies or local storage)
+        res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'strict' });
+        
         res.redirect('http://localhost:8081/');
     } catch (error) {
         console.error('Error in CAS redirection:', error);

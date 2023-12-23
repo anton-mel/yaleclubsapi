@@ -9,7 +9,7 @@ const router = express.Router();
 const CAS_SERVER = 'https://secure.its.yale.edu';
 const CAS_VALIDATE_ROUTE = '/cas/serviceValidate';
 const CAS_SERVICE = `https://yaleclubsapi.vercel.app/api/auth/redirect`;
-const JWT_SECRET = 'yaleclubs';
+const JWT_SECRET = "yaleclubs";
 
 const get_ticket_validation_link = (ticket) => {
     const validateURL = new URL(CAS_VALIDATE_ROUTE, CAS_SERVER)
@@ -41,7 +41,7 @@ router.get('/auth/redirect', async (req, res) => {
         }
     
         // Create a JWT token with user information
-        const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: '12h' });
 
         // Set the token in a client-side storage (e.g., cookies or local storage)
         res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'strict' });

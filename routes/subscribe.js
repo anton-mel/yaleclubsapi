@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 const jwt = require("jsonwebtoken");
 const Subscription = require('../models/subscription');
-const verifyToken = require("../middleware/verifyToken");
+const verifyToken = require('../middleware/verifyToken');
 
 
 router.use(verifyToken);

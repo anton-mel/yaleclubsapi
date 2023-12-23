@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
-import verifyToken from '../middleware/verifyToken';
+const verifyToken = require('../middleware/verifyToken');
 
 
 router.post('/save-club', verifyToken, async (req, res) => {

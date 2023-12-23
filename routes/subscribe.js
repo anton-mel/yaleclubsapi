@@ -1,6 +1,10 @@
 var express = require("express");
 var router = express.Router();
+const jwt = require("jsonwebtoken");
 const Subscription = require('../models/subscription');
+import verifyToken from "../middleware/verifyToken";
+
+router.use(verifyToken);
 
 // POST route to subscribe user to a club
 router.post("/subscribe", async (req, res) => {

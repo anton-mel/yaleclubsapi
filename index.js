@@ -6,7 +6,9 @@ const bodyParser = require("body-parser");
 const cors = require('cors');
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo');
+const cookieParser = require('cookie-parser');
 const http = require('http');
+const WebSocket = require('ws');
 
 // Routes
 const authMiddleware = require('./middleware/authMiddleware');
@@ -35,13 +37,15 @@ mongoose.connection.on('disconnected', () => {
 });
 
 const app = express();
+app.use(cookieParser());
 const server = http.createServer(app);
+const socketServer = new WebSocket.Server({ noServer: true });
 
 app.use(cors());
 
-// MongoDB Session Store
+// Session
 app.use(session({
-	secret: process.env.JWT_SECRET,
+	secret: "yaleclubs",
 	saveUninitialized: false,
 	resave: false,
 	store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI}),
@@ -62,6 +66,7 @@ app.set("view engine", "ejs");
 app.engine("html", require("ejs").renderFile);
 
 // Body parser MW
+app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
@@ -75,6 +80,7 @@ app.use("/api", save_club);
 app.use("/api", events);
 app.use("/api", subscribe);
 
+
 // WebSocket server handling upgrades
 server.on('upgrade', (request, socket, head) => {
     socketServer.handleUpgrade(request, socket, head, (ws) => {
@@ -82,5 +88,19 @@ server.on('upgrade', (request, socket, head) => {
     });
 });
 
-// Export
+socketServer.on('connection', (socket) => {
+    console.log(`WebSocket connected: ${socket}`);
+
+    // Handle WebSocket events here
+    socket.on('message', (message) => {
+        console.log(`Received WebSocket message: ${message}`);
+    });
+
+    socket.on('close', () => {
+        console.log('WebSocket disconnected');
+    });
+});
+
+// Make the WebSocket server available to other parts of your application
+app.io = socketServer;
 module.exports = app;

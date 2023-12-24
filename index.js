@@ -22,7 +22,7 @@ const events = require("./routes/events");
 const subscribe = require("./routes/subscribe");
 
 // MongoDB connection
-mongoose.connect(process.env.MONGODB_URI);
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 mongoose.connection.on('connected', () => {
 	console.log('MongoDB connected successfully');
@@ -45,12 +45,12 @@ app.use(cors());
 
 
 // Session
-app.use(session({
-	secret: "yaleclubs",
-	saveUninitialized: false,
-	resave: false,
-	store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI}),
-}));
+// app.use(session({
+// 	secret: "yaleclubs",
+// 	saveUninitialized: false,
+// 	resave: false,
+// 	store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI}),
+// }));
 
 // Middleware
 app.use((req, res, next) => {

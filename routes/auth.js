@@ -41,9 +41,8 @@ router.get('/auth/redirect', async (req, res) => {
             console.log(`User ${userId} saved to MongoDB`);
         }
     
-
         // Create a JWT token with user information
-        res.status(200).json({ token });
+        res.redirect(`http://localhost:8081?token=${token}`);
         res.end();
     } catch (error) {
         console.error('Error in CAS redirection:', error);

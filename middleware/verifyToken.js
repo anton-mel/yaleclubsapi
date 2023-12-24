@@ -4,24 +4,21 @@ const jwt = require('jsonwebtoken');
 module.exports = async (req, res, next) => {
   const authorizationHeader = req.headers['authorization'];
 
+  // Handle unauthorized or invalid token scenarios
   if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ message: 'Unauthorized' });
+    res.status(401).json({ message: 'Unauthorized' });
+    return res.redirect('http://localhost:8081/login');
   }
 
-  const token = authorizationHeader.split(' ')[1];
-
+  // Handle invalid token scenario
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.userId = decoded.userId;
+    req.userId = decoded;
     return next();
   } catch (error) {
     console.error('Error verifying token:', error);
-
-    // Redirect to login page on localhost:8081
-    if (req.headers.host === 'localhost:8081') {
-      return res.redirect('http://localhost:8081/login');
-    }
-
-    return res.status(403).json({ message: 'Invalid Token' });
+    res.status(403).json({ message: 'Invalid Token' });
+    return res.redirect('http://localhost:8081/login');
   }
-}
+
+};

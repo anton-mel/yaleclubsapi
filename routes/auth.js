@@ -42,7 +42,7 @@ router.get('/auth/redirect', async (req, res) => {
         }
     
         // Create a JWT token with user information
-        res.redirect(`http://localhost:8081?token=${token}`);
+        res.redirect(`http://localhost:8081/login?token=${token}`);
         res.end();
     } catch (error) {
         console.error('Error in CAS redirection:', error);

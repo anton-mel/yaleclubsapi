@@ -10,10 +10,10 @@ module.exports = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.userId = decoded.userId;
+    req.userId = decoded;
     return next();
   } catch (error) {
     console.error('Error verifying token:', error);
-    return res.status(401).json({ message: 'Unauthorized' });
+    return res.status(403).json({ message: 'Invalid Token' });
   }
 };

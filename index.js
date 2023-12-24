@@ -6,9 +6,7 @@ const bodyParser = require("body-parser");
 const cors = require('cors');
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo');
-const cookieParser = require('cookie-parser');
 const http = require('http');
-const WebSocket = require('ws');
 
 // Routes
 const authMiddleware = require('./middleware/authMiddleware');
@@ -22,7 +20,7 @@ const events = require("./routes/events");
 const subscribe = require("./routes/subscribe");
 
 // MongoDB connection
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.MONGODB_URI);
 
 mongoose.connection.on('connected', () => {
 	console.log('MongoDB connected successfully');
@@ -37,20 +35,17 @@ mongoose.connection.on('disconnected', () => {
 });
 
 const app = express();
-app.use(cookieParser());
 const server = http.createServer(app);
-const socketServer = new WebSocket.Server({ noServer: true });
 
 app.use(cors());
 
-
-// Session
-// app.use(session({
-// 	secret: "yaleclubs",
-// 	saveUninitialized: false,
-// 	resave: false,
-// 	store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI}),
-// }));
+// MongoDB Session Store
+app.use(session({
+	secret: process.env.JWT_SECRET,
+	saveUninitialized: false,
+	resave: false,
+	store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI}),
+}));
 
 // Middleware
 app.use((req, res, next) => {
@@ -67,7 +62,6 @@ app.set("view engine", "ejs");
 app.engine("html", require("ejs").renderFile);
 
 // Body parser MW
-app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
@@ -81,7 +75,6 @@ app.use("/api", save_club);
 app.use("/api", events);
 app.use("/api", subscribe);
 
-
 // WebSocket server handling upgrades
 server.on('upgrade', (request, socket, head) => {
     socketServer.handleUpgrade(request, socket, head, (ws) => {
@@ -89,19 +82,5 @@ server.on('upgrade', (request, socket, head) => {
     });
 });
 
-socketServer.on('connection', (socket) => {
-    console.log(`WebSocket connected: ${socket}`);
-
-    // Handle WebSocket events here
-    socket.on('message', (message) => {
-        console.log(`Received WebSocket message: ${message}`);
-    });
-
-    socket.on('close', () => {
-        console.log('WebSocket disconnected');
-    });
-});
-
-// Make the WebSocket server available to other parts of your application
-app.io = socketServer;
+// Export
 module.exports = app;

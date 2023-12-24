@@ -45,8 +45,8 @@ const socketServer = new WebSocket.Server({ noServer: true });
 const corsOptions = {
     origin: 'http://localhost:8081',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true, // Enable CORS credentials (cookies, authorization headers)
-    optionsSuccessStatus: 204, // Respond with 204 No Content for preflight requests
+    credentials: true,
+    optionsSuccessStatus: 204,
 };
 
 app.use(cors(corsOptions));

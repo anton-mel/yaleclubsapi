@@ -41,7 +41,15 @@ app.use(cookieParser());
 const server = http.createServer(app);
 const socketServer = new WebSocket.Server({ noServer: true });
 
-app.use(cors());
+// Configure CORS
+const corsOptions = {
+    origin: 'http://localhost:8081',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true, // Enable CORS credentials (cookies, authorization headers)
+    optionsSuccessStatus: 204, // Respond with 204 No Content for preflight requests
+};
+
+app.use(cors(corsOptions));
 
 // Session
 app.use(session({

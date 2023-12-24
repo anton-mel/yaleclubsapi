@@ -6,8 +6,8 @@ module.exports = async (req, res, next) => {
 
   // Handle unauthorized or invalid token scenarios
   if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
+    res.redirect('http://localhost:8081/login');
     res.status(401).json({ message: 'Unauthorized' });
-    return res.redirect('http://localhost:8081/login');
   }
 
   // Handle invalid token scenario
@@ -17,8 +17,8 @@ module.exports = async (req, res, next) => {
     return next();
   } catch (error) {
     console.error('Error verifying token:', error);
+    res.redirect('http://localhost:8081/login');
     res.status(403).json({ message: 'Invalid Token' });
-    return res.redirect('http://localhost:8081/login');
   }
 
 };

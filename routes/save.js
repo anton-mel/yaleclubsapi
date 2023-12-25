@@ -62,6 +62,7 @@ router.get('/check-club/:clubId', verifyToken, async (req, res) => {
 router.get('/get-saved-clubs', verifyToken, async (req, res) => {
   try {
     const userId = req.userId;
+    console.log("sdffsdfsdf:  "+userId);
 
     if (!userId) {
         return res.status(401).json({ error: 'User not authenticated' });

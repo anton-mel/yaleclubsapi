@@ -7,7 +7,7 @@ module.exports = async (req, res, next) => {
   // Handle unauthorized or invalid token scenarios
   if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
     res.redirect('http://localhost:8081/login');
-    return;
+    return res.status(401).json({ message: 'Unauthorized' });
   }
 
   const token = authorizationHeader.split(' ')[1];

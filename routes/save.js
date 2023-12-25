@@ -28,6 +28,7 @@ router.get('/check-club/:clubId', verifyToken, async (req, res) => {
     const user = req.user;
 
     const isClubSaved = user.saved.includes(clubId);
+    console.log("here: "+isClubSaved);
     res.status(200).json({ isClubSaved });
   } catch (error) {
     console.error('Error checking if club is saved:', error);
@@ -43,6 +44,7 @@ router.get('/get-saved-clubs', verifyToken, async (req, res) => {
     console.log(user.saved);
 
     const savedClubs = user.saved;
+    onsole.log("here: "+savedClubs);
     res.status(200).json({ savedClubs });
   } catch (error) {
     console.error('Error getting saved clubs:', error);

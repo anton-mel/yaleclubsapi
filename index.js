@@ -34,7 +34,8 @@ const app = express();
 const server = http.createServer(app);
 const socketServer = new WebSocket.Server({ noServer: true });
 
-app.use(cors());
+// Configure Development CORS
+app.use(cors({ origin: 'http://localhost:8081' }));
 
 // Session
 app.use(session({

@@ -1,43 +1,36 @@
+// Index.js
 const express = require("express");
-const path = require("path");
-require('dotenv').config();
 const session = require('express-session');
 const bodyParser = require("body-parser");
-const cors = require('cors');
-const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo');
-const cookieParser = require('cookie-parser');
+const mongoose = require('mongoose');
+
+require('dotenv').config();
+const path = require("path");
+const cors = require('cors');
 const http = require('http');
 const WebSocket = require('ws');
 
 // Routes
 const authMiddleware = require('./middleware/authMiddleware');
-const data = require("./routes/data");
-const comment = require("./routes/comment");
-const comments = require("./routes/comments");
-const auth = require("./routes/auth");
-const logout = require("./routes/logout");
-const save_club = require("./routes/save");
-const events = require("./routes/events");
 const subscribe = require("./routes/subscribe");
+const comments = require("./routes/comments");
+const comment = require("./routes/comment");
+const save_club = require("./routes/save");
+const logout = require("./routes/logout");
+const events = require("./routes/events");
+const data = require("./routes/data");
+const auth = require("./routes/auth");
 
-// MongoDB connection
+// MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI);
 
-mongoose.connection.on('connected', () => {
-	console.log('MongoDB connected successfully');
-});
+mongoose.connection.on('connected', () => {console.log('MongoDB connected successfully');});
+mongoose.connection.on('error', (err) => {console.error('MongoDB connection error:', err);});
+mongoose.connection.on('disconnected', () => {console.log('MongoDB disconnected');});
 
-mongoose.connection.on('error', (err) => {
-	console.error('MongoDB connection error:', err);
-});
-
-mongoose.connection.on('disconnected', () => {
-	console.log('MongoDB disconnected');
-});
-
+// Set Up
 const app = express();
-app.use(cookieParser());
 const server = http.createServer(app);
 const socketServer = new WebSocket.Server({ noServer: true });
 

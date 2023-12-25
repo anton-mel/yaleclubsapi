@@ -6,7 +6,12 @@ const verifyToken = require('../middleware/verifyToken');
 router.delete('/delete-club/:clubId', verifyToken, async (req, res) => {
   try {
     const { clubId } = req.params;
-    const user = req.user;
+    const userId = req.userId;
+    const user = await User.findOne({ userId });
+
+    if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+    }
 
     const index = user.saved.indexOf(clubId);
 

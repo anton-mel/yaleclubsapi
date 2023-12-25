@@ -6,12 +6,11 @@ router.delete('/delete-club', verifyToken, async (req, res) => {
   try {
     const { clubId } = req.body;
     const user = req.user;
-
-    if (user.saved.includes(clubId)) {
-      return res.status(400).json({ error: 'Club ID already saved for this user' });
-    }
+    console.log(user);
+    console.log(clubId);
 
     const index = user.saved.indexOf(clubId);
+    console.log(index);
 
     if (index === -1) {
         return res.status(400).json({ error: 'Club ID not found in user\'s saved clubs' });

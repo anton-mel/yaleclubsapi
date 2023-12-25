@@ -64,11 +64,6 @@ app.use((req, res, next) => {
     }
 });
 
-// Views
-app.set("views",  path.join(__dirname, "views"));
-app.set("view engine", "ejs");
-app.engine("html", require("ejs").renderFile);
-
 // Body parser MW
 app.use(express.json());
 app.use(bodyParser.json());
@@ -83,6 +78,11 @@ app.use("/api", logout);
 app.use("/api", save_club);
 app.use("/api", events);
 app.use("/api", subscribe);
+
+// Views
+app.set("views",  path.join(__dirname, "views"));
+app.set("view engine", "ejs");
+app.engine("html", require("ejs").renderFile);
 
 // The following code is needed for local dev
 // WebSocket server handling upgrades

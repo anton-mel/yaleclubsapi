@@ -39,6 +39,8 @@ router.get('/check-club/:clubId', verifyToken, async (req, res) => {
 router.get('/get-saved-clubs', verifyToken, async (req, res) => {
   try {
     const user = req.user;
+    console.log(user);
+    console.log(user.saved);
 
     const savedClubs = user.saved;
     res.status(200).json({ savedClubs });

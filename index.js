@@ -40,7 +40,7 @@ const socketServer = new WebSocket.Server({ server });
 const corsOptions = {
     origin: 'http://localhost:8081',
     methods: 'POST, GET, PATCH, DELETE, OPTIONS',
-    allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept',
+    allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
     credentials: true, // cookies
     optionsSuccessStatus: 204,
 };

@@ -14,8 +14,8 @@ module.exports = async (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log(decoded);
-    req.userId = decoded; 
+    console.log(decoded.userId);
+    req.userId = decoded.userId; 
     return next();
   } catch (error) {
     console.error('Error verifying token:', error);

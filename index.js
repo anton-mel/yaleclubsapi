@@ -32,7 +32,9 @@ mongoose.connection.on('disconnected', () => {console.log('MongoDB disconnected'
 // Set Up
 const app = express();
 const server = http.createServer(app);
-const socketServer = new WebSocket.Server({ noServer: true });
+
+// Create a WebSocket server and attach it to the HTTP server
+const socketServer = new WebSocket.Server({ server });
 
 // Configure Development CORS
 app.use(cors({ origin: 'http://localhost:8081' }));
@@ -74,7 +76,7 @@ app.use("/api", save_club);
 app.use("/api", events);
 app.use("/api", subscribe);
 
-
+// The following code is needed for local dev
 // WebSocket server handling upgrades
 server.on('upgrade', (request, socket, head) => {
     socketServer.handleUpgrade(request, socket, head, (ws) => {
@@ -95,6 +97,11 @@ socketServer.on('connection', (socket) => {
     });
 });
 
-// Make the WebSocket server available to other parts of your application
+// Run Server Locally
+const PORT = process.env.PORT || 8082;
+server.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
+
 app.io = socketServer;
 module.exports = app;

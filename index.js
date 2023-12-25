@@ -36,8 +36,16 @@ const server = http.createServer(app);
 // Create a WebSocket server and attach it to the HTTP server
 const socketServer = new WebSocket.Server({ server });
 
-// Configure Development CORS
-app.use(cors({ origin: 'http://localhost:8081' }));
+// Configure CORS
+const corsOptions = {
+    origin: 'http://localhost:8081',
+    methods: 'POST, GET, PATCH, DELETE, OPTIONS',
+    allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept',
+    credentials: true, // cookies
+    optionsSuccessStatus: 204,
+};
+
+app.use(cors(corsOptions));
 
 // Session
 app.use(session({

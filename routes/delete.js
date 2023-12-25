@@ -7,6 +7,8 @@ router.delete('/delete-club/:clubId', verifyToken, async (req, res) => {
   try {
     const { clubId } = req.params;
     const userId = req.userId;
+    console.log(userId);
+    console.log(clubId);
     const user = await User.findOne({ userId });
 
     if (!user) {

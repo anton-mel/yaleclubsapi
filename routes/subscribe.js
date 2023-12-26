@@ -1,15 +1,13 @@
 var express = require("express");
 var router = express.Router();
-const jwt = require("jsonwebtoken");
 const Subscription = require('../models/subscription');
 const verifyToken = require('../middleware/verifyToken');
-
 
 router.use(verifyToken);
 
 // POST route to subscribe user to a club
-router.post("/subscribe", async (req, res) => {
-  const { clubId } = req.body;
+router.post("/subscribe", verifyToken, async (req, res) => {
+  const { clubId } = req.userId;
   const userId = req.session.user;
 
   try {
@@ -45,9 +43,9 @@ router.post("/subscribe", async (req, res) => {
 });
 
 // GET route to check if the session user is subscribed to the club
-router.get("/subscriptions/:clubId", async (req, res) => {
+router.get("/subscriptions/:clubId", verifyToken, async (req, res) => {
     const { clubId } = req.params;
-    const userId = req.session.user;
+    const userId = req.userId;
   
     try {
       const subscription = await Subscription.findOne({ clubId });
@@ -95,12 +93,9 @@ router.get("/subscriptions/length/:clubId", async (req, res) => {
 });
   
 // DELETE route to unsubscribe user from a club
-router.delete("/unsubscribe", async (req, res) => {
+router.delete("/unsubscribe", verifyToken, async (req, res) => {
   const { clubId } = req.body;
-  const userId = req.session.user;
-
-  console.log(clubId);
-  console.log(userId);
+  const userId = req.userId;
 
   try {
     if (!clubId || !userId) {

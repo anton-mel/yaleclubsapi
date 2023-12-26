@@ -31,6 +31,6 @@ module.exports = async (req, res, next) => {
     return next();
   } catch (error) {
     console.error('Error verifying token:', error);
-    return res.status(403).json({ message: 'Invalid Token' });
+    return res.redirect('http://localhost:8081/login');
   }
 };

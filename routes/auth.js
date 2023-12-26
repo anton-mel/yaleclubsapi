@@ -46,7 +46,7 @@ router.get('/auth/redirect', async (req, res) => {
         }
     
         // Return the Token
-        res.redirect(`http://localhost:8081/login?token=${token}`);
+        res.redirect(`https://yaleclubs-fdlayt3z7-antonmelnychuk3-gmailcom.vercel.app/login?token=${token}`);
     } catch (error) {
         console.error('Error in CAS redirection:', error);
         res.status(500).send('Internal Server Error');

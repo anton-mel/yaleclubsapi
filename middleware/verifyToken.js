@@ -4,12 +4,6 @@ const User = require('../models/user');
 module.exports = async (req, res, next) => {
   const authorizationHeader = req.headers['authorization'];
 
-  // Handle unauthorized or invalid token scenarios
-  if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
-    res.redirect('http://localhost:8081/login');
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
-
   const token = authorizationHeader.split(' ')[1];
 
   try {
@@ -21,7 +15,7 @@ module.exports = async (req, res, next) => {
 
     if (!user) {
       // Invalid or Expired Token
-      return res.redirect('http://localhost:8081/login');
+      return res.status(401).json({ message: 'Unauthorized' });
     }
 
     // Provide User
@@ -31,6 +25,6 @@ module.exports = async (req, res, next) => {
     return next();
   } catch (error) {
     console.error('Error verifying token:', error);
-    return res.redirect('http://localhost:8081/login');
+    return res.status(401).json({ message: 'Unauthorized' });
   }
 };

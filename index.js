@@ -12,7 +12,6 @@ const http = require('http');
 const WebSocket = require('ws');
 
 // Routes
-const authMiddleware = require('./middleware/authMiddleware');
 const subscribe = require("./routes/subscribe");
 const comments = require("./routes/comments");
 const comment = require("./routes/comment");
@@ -54,15 +53,6 @@ app.use(session({
 	resave: false,
 	store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI}),
 }));
-
-// Middleware
-app.use((req, res, next) => {
-	if (!req.url.startsWith('/api')) {
-		authMiddleware(req, res, next);
-    } else {
-        next();
-    }
-});
 
 // Body parser MW
 app.use(express.json());

@@ -46,7 +46,11 @@ router.get('/auth/redirect', async (req, res) => {
         }
     
         // Return the Token
-        res.redirect(`http://localhost:8081/login?token=${token}`);
+        if (Platform.OS === 'web') {
+            res.redirect(`http://localhost:8081/login?token=${token}`);
+        } else {
+            res.redirect(`exp://l-ke0mi.anonymous.8081.exp.direct?token=${token}`);
+        }
     } catch (error) {
         console.error('Error in CAS redirection:', error);
         res.status(500).send('Internal Server Error');

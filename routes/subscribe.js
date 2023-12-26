@@ -3,8 +3,6 @@ var router = express.Router();
 const Subscription = require('../models/subscription');
 const verifyToken = require('../middleware/verifyToken');
 
-router.use(verifyToken);
-
 // POST route to subscribe user to a club
 router.post("/subscribe", verifyToken, async (req, res) => {
   const { clubId } = req.body;

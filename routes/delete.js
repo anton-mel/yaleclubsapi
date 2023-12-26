@@ -3,7 +3,7 @@ const router = express.Router();
 const verifyToken = require('../middleware/verifyToken');
 const User = require('../models/user');
 
-router.delete('/delete-club', verifyToken, async (req, res) => {
+router.post('/delete-club', verifyToken, async (req, res) => {
   try {
     const { clubId } = req.body;
     const userId = req.userId;

@@ -7,15 +7,15 @@ router.delete('/delete-club', verifyToken, async (req, res) => {
   try {
     const { clubId } = req.body;
     const userId = req.userId;
-    res.status(200).json({ userId });
     
     const user = await User.findOne({ userId });
     const ClubIndex = user.saved.indexOf(clubId);
-
+    
     if (ClubIndex === -1) {
-        return res.status(400).json({ error: 'Club ID not found in user\'s saved clubs' });
+      return res.status(400).json({ error: 'Club ID not found in user\'s saved clubs' });
     }
-
+    
+    res.status(200).json({ ClubIndex });
     user.saved.splice(ClubIndex, 1);
     await user.save();
 

@@ -7,8 +7,8 @@ router.use(verifyToken);
 
 // POST route to subscribe user to a club
 router.post("/subscribe", verifyToken, async (req, res) => {
-  const { clubId } = req.userId;
-  const userId = req.session.user;
+  const { clubId } = req.body;
+  const userId = req.userId;
 
   try {
     if (!clubId || !userId) {

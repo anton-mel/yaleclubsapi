@@ -21,8 +21,7 @@ module.exports = async (req, res, next) => {
 
     if (!user) {
       // Invalid or Expired Token
-      res.redirect('http://localhost:8081/login');
-      return res.status(401).json({ error: 'User not authenticated' });
+      return res.redirect('http://localhost:8081/login');
     }
 
     // Provide User
@@ -32,7 +31,6 @@ module.exports = async (req, res, next) => {
     return next();
   } catch (error) {
     console.error('Error verifying token:', error);
-    res.redirect('http://localhost:8081/login');
     return res.status(403).json({ message: 'Invalid Token' });
   }
 };

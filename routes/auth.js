@@ -53,7 +53,7 @@ router.get('/auth/redirect', async (req, res) => {
             res.redirect(`exp://l-ke0mi.anonymous.8081.exp.direct/--/login?token=${token}`);
         } else {
             // Redirect for web or other platforms
-            res.redirect(`http://localhost:8081/login?token=${token}`);
+            res.redirect(`http://l-ke0mi.anonymous.8081.exp.direct/login?token=${token}`);
         }
     } catch (error) {
         console.error('Error in CAS redirection:', error);

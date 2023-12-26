@@ -16,9 +16,9 @@ const authMiddleware = require('./middleware/authMiddleware');
 const subscribe = require("./routes/subscribe");
 const comments = require("./routes/comments");
 const comment = require("./routes/comment");
-const save_club = require("./routes/save");
 const logout = require("./routes/logout");
 const events = require("./routes/events");
+const club = require("./routes/club");
 const data = require("./routes/data");
 const auth = require("./routes/auth");
 
@@ -75,7 +75,7 @@ app.use("/api", comment);
 app.use("/api", comments);
 app.use("/api", auth);
 app.use("/api", logout);
-app.use("/api", save_club);
+app.use("/api", club);
 app.use("/api", events);
 app.use("/api", subscribe);
 

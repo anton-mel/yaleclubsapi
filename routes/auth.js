@@ -60,7 +60,7 @@ router.get('/auth/redirect', async (req, res) => {
         
         // Check the User-Agent to determine if it's Expo or a regular browser
         const isExpoApp = req.get('User-Agent').includes('Expo');
-        const url = AuthSession.getRedirectUrl('login');
+        const url = getRedirectUrl('/login');
 
         if (isExpoApp) {
             // Redirect for Expo app

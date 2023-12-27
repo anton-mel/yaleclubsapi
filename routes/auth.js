@@ -37,7 +37,7 @@ const handleCASValidation = async (ticket) => {
         return userId;
     } catch (error) {
         console.error('Error in CAS redirection:', error);
-        throw error; // Rethrow the error for handling in the calling context
+        throw error;
     }
 };
 
@@ -60,7 +60,9 @@ router.get('/auth/redirect', async (req, res) => {
         
         // Check the User-Agent to determine if it's Expo or a regular browser
         const isExpoApp = req.get('User-Agent').includes('Expo');
+        console.log(1);
         const url = getRedirectUrl('/login');
+        console.log(url);
 
         if (isExpoApp) {
             // Redirect for Expo app

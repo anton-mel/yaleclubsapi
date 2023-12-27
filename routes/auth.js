@@ -9,11 +9,13 @@ const User = require("../models/user");
 const router = express.Router();
 const CAS_SERVER = 'https://secure.its.yale.edu';
 const CAS_VALIDATE_ROUTE = '/cas/serviceValidate';
+const CAS_SERVICE = `https://yaleclubsapi.vercel.app/api/auth/redirect`;
 
 // Yale CAS System Configs
 const get_ticket_validation_link = (ticket) => {
     const validateURL = new URL(CAS_VALIDATE_ROUTE, CAS_SERVER)
     validateURL.searchParams.append('ticket', ticket)
+    validateURL.searchParams.append('service', CAS_SERVICE)
     return validateURL.toString()
 }
 

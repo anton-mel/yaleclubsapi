@@ -19,37 +19,47 @@ const get_ticket_validation_link = (ticket) => {
     return validateURL.toString()
 }
 
-router.get('/auth/redirect', async (req, res) => {
+// Function to handle CAS validation
+const handleCASValidation = async (ticket) => {
     try {
         const redirectUri = 'yaleclubs://';
-        const casResponse = await axios.get(get_ticket_validation_link(req.query.ticket), redirectUri);
-        
+        const casResponse = await axios.get(get_ticket_validation_link(ticket), redirectUri);
+
         // Error Handler
         if (casResponse.data === undefined) {
-            return res.status(400).send('Invalid response from CAS server');
+            throw new Error('Invalid response from CAS server');
         }
-        
+
         // XML Parser Unwrap User Data
         const parser = new XMLParser();
         const results = parser.parse(casResponse.data);
         const userId = results['cas:serviceResponse']['cas:authenticationSuccess']['cas:user'];
-        const token = jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '12h' });
-        
+
+        return { casResponse: casResponse.data, userId };
+    } catch (error) {
+        console.error('Error in CAS redirection:', error);
+        throw error; // Rethrow the error for handling in the calling context
+    }
+};
+
+router.get('/auth/redirect', async (req, res) => {
+    try {
+        const { casResponse, userId } = await handleCASValidation(req.query.ticket);
+
         // Check if the user is already in MongoDB
         const existingUser = await User.findOne({ userId });
-        
+
         // Save the user to MongoDB if not already present
         if (!existingUser) {
             const newUser = new User({ userId });
             await newUser.save();
-            
             console.log(`User ${userId} saved to MongoDB`);
         }
-    
-        // Return the Token
-        res.status(200).send(token);
+
+        // Generate and return the token
+        const token = jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '12h' });
+        res.status(200).json({ token });
     } catch (error) {
-        console.error('Error in CAS redirection:', error);
         res.status(500).send('Internal Server Error');
     }
 });

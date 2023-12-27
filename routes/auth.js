@@ -9,21 +9,18 @@ const User = require("../models/user");
 const router = express.Router();
 const CAS_SERVER = 'https://secure.its.yale.edu';
 const CAS_VALIDATE_ROUTE = '/cas/serviceValidate';
-const CAS_SERVICE = `https://yaleclubsapi.vercel.app/api/auth/redirect`;
 
 // Yale CAS System Configs
 const get_ticket_validation_link = (ticket) => {
     const validateURL = new URL(CAS_VALIDATE_ROUTE, CAS_SERVER)
     validateURL.searchParams.append('ticket', ticket)
-    validateURL.searchParams.append('service', CAS_SERVICE)
     return validateURL.toString()
 }
 
 // Function to handle CAS validation
 const handleCASValidation = async (ticket) => {
     try {
-        const redirectUri = 'yaleclubs://';
-        const casResponse = await axios.get(get_ticket_validation_link(ticket), redirectUri);
+        const casResponse = await axios.get(get_ticket_validation_link(ticket));
 
         // Error Handler
         if (casResponse.data === undefined) {
@@ -35,7 +32,7 @@ const handleCASValidation = async (ticket) => {
         const results = parser.parse(casResponse.data);
         const userId = results['cas:serviceResponse']['cas:authenticationSuccess']['cas:user'];
 
-        return { casResponse: casResponse.data, userId };
+        return userId;
     } catch (error) {
         console.error('Error in CAS redirection:', error);
         throw error; // Rethrow the error for handling in the calling context
@@ -44,7 +41,7 @@ const handleCASValidation = async (ticket) => {
 
 router.get('/auth/redirect', async (req, res) => {
     try {
-        const { casResponse, userId } = await handleCASValidation(req.query.ticket);
+        const userId = await handleCASValidation(req.query.ticket);
 
         // Check if the user is already in MongoDB
         const existingUser = await User.findOne({ userId });

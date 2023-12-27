@@ -36,7 +36,7 @@ const socketServer = new WebSocket.Server({ server });
 
 // Configure CORS
 const corsOptions = {
-    origin: ['http://localhost:8081', 'exp://l-ke0mi.anonymous.8081.exp.direct', 'https://yaleclubs.vercel.app'],
+    origin: ['http://localhost:8081', 'yaleclubs://', 'exp://l-ke0mi.anonymous.8081.exp.direct', 'https://yaleclubs.vercel.app'],
     methods: 'POST, GET, PATCH, DELETE, OPTIONS',
     allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
     credentials: true, // cookies

@@ -1,7 +1,6 @@
 const axios = require("axios")
 const express = require("express");
 const jwt = require("jsonwebtoken");
-import { Platform } from 'react-native';
 const { XMLParser} = require("fast-xml-parser");
 
 // MongoDB Interface
@@ -46,15 +45,8 @@ router.get('/auth/redirect', async (req, res) => {
             console.log(`User ${userId} saved to MongoDB`);
         }
     
-        const userAgent = req.headers['user-agent'];
-
-        if (userAgent.includes('Expo')) {
-            // Redirect for Expo Go (physical device)
-            res.redirect(`exp://l-ke0mi.anonymous.8081.exp.direct/--/login?token=${token}`);
-        } else {
-            // Redirect for web or other platforms
-            res.redirect(`http://l-ke0mi.anonymous.8081.exp.direct/login?token=${token}`);
-        }
+        // Return the Token
+        res.redirect(`http://localhost:8081/login?token=${token}`);
     } catch (error) {
         console.error('Error in CAS redirection:', error);
         res.status(500).send('Internal Server Error');

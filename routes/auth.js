@@ -46,7 +46,7 @@ router.get('/auth/redirect', async (req, res) => {
         }
     
         // Return the Token
-        res.redirect(`yaleclubs://login?token=${token}`);
+        res.status(200).send(token);
     } catch (error) {
         console.error('Error in CAS redirection:', error);
         res.status(500).send('Internal Server Error');

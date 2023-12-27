@@ -63,7 +63,7 @@ router.get('/auth/redirect', async (req, res) => {
 
         if (isExpoApp) {
             // Redirect for Expo app
-            const redirectUrl = `https://auth.expo.io/@antonmel/yaleclubs`;
+            const redirectUrl = `exp://l-ke0mi.anonymous.8081.exp.direct/login?token=${token}`;
             res.redirect(redirectUrl);
         } else {
             // Redirect for regular browser

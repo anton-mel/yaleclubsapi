@@ -57,7 +57,7 @@ router.get('/auth/redirect', async (req, res) => {
 
         // Generate and return the token
         const token = jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '12h' });
-        const redirectUrl = `http://localhost:8081/login?token=${token}`;
+        const redirectUrl = `http://l-ke0mi.anonymous.8081.exp.direct/login?token=${token}`;
         res.redirect(redirectUrl);
     } catch (error) {
         res.status(500).send('Internal Server Error');

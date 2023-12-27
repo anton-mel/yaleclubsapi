@@ -60,12 +60,12 @@ router.get('/auth/redirect', async (req, res) => {
         
         // Check the User-Agent to determine if it's Expo or a regular browser
         const isExpoApp = req.get('User-Agent').includes('Expo');
-        const url = AuthSession.makeRedirectUri('/login');
+        // const url = AuthSession.makeRedirectUri('/login');
 
         if (isExpoApp) {
             // Redirect for Expo app
-            const redirectUrl = `${url}?token=${token}`;
-            res.redirect(redirectUrl);
+            // const redirectUrl = `${url}?token=${token}`;
+            // res.redirect(redirectUrl);
         } else {
             // Redirect for regular browser
             const redirectUrl = `https://l-ke0mi.anonymous.8081.exp.direct/login?token=${token}`;

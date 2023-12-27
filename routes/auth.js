@@ -1,7 +1,6 @@
 const axios = require("axios")
 const express = require("express");
 const jwt = require("jsonwebtoken");
-import { UrlUtils, makeRedirectUri } from 'expo-auth-session';
 const { XMLParser} = require("fast-xml-parser");
 
 // MongoDB Interface
@@ -38,7 +37,7 @@ const handleCASValidation = async (ticket) => {
         return userId;
     } catch (error) {
         console.error('Error in CAS redirection:', error);
-        throw error;
+        throw error; // Rethrow the error for handling in the calling context
     }
 };
 
@@ -61,12 +60,11 @@ router.get('/auth/redirect', async (req, res) => {
         
         // Check the User-Agent to determine if it's Expo or a regular browser
         const isExpoApp = req.get('User-Agent').includes('Expo');
-        const url = makeRedirectUri({ useProxy: true });
 
         if (isExpoApp) {
             // Redirect for Expo app
-            const urlWithToken = UrlUtils.appendParams(url, { token });
-            res.redirect(urlWithToken);
+            const redirectUrl = `https://auth.expo.io/@antonmel/yaleclubs`;
+            res.redirect(redirectUrl);
         } else {
             // Redirect for regular browser
             const redirectUrl = `https://l-ke0mi.anonymous.8081.exp.direct/login?token=${token}`;

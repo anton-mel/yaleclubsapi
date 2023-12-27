@@ -57,7 +57,8 @@ router.get('/auth/redirect', async (req, res) => {
 
         // Generate and return the token
         const token = jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '12h' });
-        res.status(200).json({ token });
+        const redirectUrl = `yaleclubs://login?token=${token}`;
+        res.redirect(redirectUrl);
     } catch (error) {
         res.status(500).send('Internal Server Error');
     }

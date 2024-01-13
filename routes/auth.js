@@ -9,7 +9,7 @@ const User = require("../models/user");
 const router = express.Router();
 const CAS_SERVER = 'https://secure.its.yale.edu';
 const CAS_VALIDATE_ROUTE = '/cas/serviceValidate';
-const CAS_SERVICE = `http://localhost:8082/api/auth/redirect`;
+const CAS_SERVICE = `https://yaleclubsapi.vercel.app/api/auth/redirect`;
 
 // Yale CAS System Configs
 const get_ticket_validation_link = (ticket) => {
@@ -86,5 +86,22 @@ router.get('/auth/verify', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
+
+// Remove the Expo Session
+router.post('/auth/logout', (req, res) => {
+    try {
+        req.session.destroy((err) => {
+            if (err) {
+                console.error('Error destroying session:', err);
+                res.status(500).send('Internal Server Error');
+            } else {
+                res.status(200).send('Logout successful');
+            }
+        });
+    } catch (error) {
+        console.error('Error during logout:', error);
+        res.status(500).send('Internal Server Error');
+    }
+});  
 
 module.exports = router;

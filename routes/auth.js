@@ -9,7 +9,7 @@ const User = require("../models/user");
 const router = express.Router();
 const CAS_SERVER = 'https://secure.its.yale.edu';
 const CAS_VALIDATE_ROUTE = '/cas/serviceValidate';
-const CAS_SERVICE = `https://yaleclubsapi.vercel.app/api/auth/redirect`;
+const CAS_SERVICE = `http://localhost:8082/api/auth/redirect`;
 
 // Yale CAS System Configs
 const get_ticket_validation_link = (ticket) => {
@@ -37,7 +37,7 @@ const handleCASValidation = async (ticket) => {
         return userId;
     } catch (error) {
         console.error('Error in CAS redirection:', error);
-        throw error; // Rethrow the error for handling in the calling context
+        throw error;
     }
 };
 
@@ -57,20 +57,32 @@ router.get('/auth/redirect', async (req, res) => {
 
         // Generate and return the token
         const token = jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '12h' });
-        
-        // Check the User-Agent to determine if it's Expo or a regular browser
-        const isExpoApp = req.get('User-Agent').includes('Expo');
 
-        if (isExpoApp) {
-            // Redirect for Expo app
-            const redirectUrl = `exp://l-ke0mi.anonymous.8081.exp.direct/login?token=${token}`;
-            res.redirect(redirectUrl);
+        req.session.user = userId;
+        req.session.redirected = true;
+        res.status(200).send('Successful Authentication');
+    } catch (error) {
+        res.status(500).send('Internal Server Error');
+    }
+});
+ 
+// Auth Provider
+router.get('/auth/verify', async (req, res) => {
+    try {
+        if (req.session.user) {
+            const token = jwt.sign({ userId: req.session.user }, process.env.JWT_SECRET, { expiresIn: '12h' });
+    
+            const responseData = {
+                userId: req.session.user,
+                token,
+            };
+    
+            res.status(200).json(responseData);
         } else {
-            // Redirect for regular browser
-            const redirectUrl = `https://l-ke0mi.anonymous.8081.exp.direct/login?token=${token}`;
-            res.redirect(redirectUrl);
+            res.status(401).json({ error: 'User not authenticated' });
         }
     } catch (error) {
+        console.error('Error in /auth/verify:', error);
         res.status(500).send('Internal Server Error');
     }
 });

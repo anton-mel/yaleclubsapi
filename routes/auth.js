@@ -67,15 +67,16 @@ router.get('/auth/redirect', async (req, res) => {
 router.get('/auth/verify', (req, res) => {
     try {
         if (req.session.user) {
-            const token = jwt.sign({ userId: req.session.user }, process.env.JWT_SECRET, { expiresIn: '12h' });
+            res.status(200).json({userId: "Works", "data"});
+            // const token = jwt.sign({ userId: req.session.user }, process.env.JWT_SECRET, { expiresIn: '12h' });
             
-            // Save Id & Token
-            const responseData = {
-                userId: req.session.user,
-                token,
-            };
+            // // Save Id & Token
+            // const responseData = {
+            //     userId: req.session.user,
+            //     token,
+            // };
             
-            res.status(200).json(responseData);
+            // res.status(200).json(responseData);
         } else {
             res.status(401).json({ error: 'User not authenticated' });
         }

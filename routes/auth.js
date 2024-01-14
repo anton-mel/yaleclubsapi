@@ -71,11 +71,11 @@ router.get('/auth/verify', (req, res) => {
             
             // Save Id & Token
             const responseData = {
-                userId: "123",
+                userId: req.session.user,
                 token,
             };
             
-            res.status(200).json(token);
+            res.status(200).json(responseData);
         } else {
             res.status(401).json({ error: 'User not authenticated' });
         }

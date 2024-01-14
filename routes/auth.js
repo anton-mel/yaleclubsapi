@@ -66,7 +66,7 @@ router.get('/auth/redirect', async (req, res) => {
 // Client Auth Provider
 router.get('/auth/verify', async (req, res) => {
     try {
-        console.log('Session User:', req.session.user);
+        console.log('Session User:', req.session);
         if (req.session.user) {
             const token = jwt.sign({ userId: req.session.user }, process.env.JWT_SECRET, { expiresIn: '12h' });
             

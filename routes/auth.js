@@ -24,7 +24,6 @@ const handleCASValidation = async (ticket) => {
     try {
         const casResponse = await axios.get(get_ticket_validation_link(ticket));
 
-        // Error Handler
         if (casResponse.data === undefined) {
             throw new Error('Invalid response from CAS server');
         }
@@ -55,28 +54,27 @@ router.get('/auth/redirect', async (req, res) => {
             console.log(`User ${userId} saved to MongoDB`);
         }
 
-        // Generate and return the token
-        const token = jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '12h' });
-
+        // Save with Expo-Session
         req.session.user = userId;
         req.session.redirected = true;
-        res.status(200).send('Successful Authentication');
+        res.redirect('http://localhost:8081/login');
     } catch (error) {
         res.status(500).send('Internal Server Error');
     }
 });
  
-// Auth Provider
-router.get('/auth/verify', async (req, res) => {
+// Client Auth Provider
+router.get('/auth/verify', (req, res) => {
     try {
         if (req.session.user) {
             const token = jwt.sign({ userId: req.session.user }, process.env.JWT_SECRET, { expiresIn: '12h' });
-    
+            
+            // Save Id & Token
             const responseData = {
                 userId: req.session.user,
                 token,
             };
-    
+            
             res.status(200).json(responseData);
         } else {
             res.status(401).json({ error: 'User not authenticated' });
@@ -88,20 +86,25 @@ router.get('/auth/verify', async (req, res) => {
 });
 
 // Remove the Expo Session
-router.post('/auth/logout', (req, res) => {
+router.get('/auth/logout', (req, res) => {
     try {
-        req.session.destroy((err) => {
-            if (err) {
-                console.error('Error destroying session:', err);
-                res.status(500).send('Internal Server Error');
-            } else {
-                res.status(200).send('Logout successful');
-            }
-        });
+        if (req.session.user) {
+            req.session.destroy((err) => {
+                if (err) {
+                    console.error('Error destroying session:', err);
+                    res.status(500).send('Internal Server Error');
+                } else {
+                    res.status(200).send("Successfully Logged Out");
+                }
+            });
+        } else {
+            // If the user is not authenticated, consider sending a 401 status.
+            res.status(401).send('User not authenticated');
+        }
     } catch (error) {
         console.error('Error during logout:', error);
         res.status(500).send('Internal Server Error');
     }
-});  
+});
 
 module.exports = router;

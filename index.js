@@ -1,9 +1,9 @@
 // Index.js
 const express = require("express");
-const session = require('express-session');
-const bodyParser = require("body-parser");
-const MongoStore = require('connect-mongo');
 const mongoose = require('mongoose');
+const bodyParser = require("body-parser");
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
 
 require('dotenv').config();
 const path = require("path");
